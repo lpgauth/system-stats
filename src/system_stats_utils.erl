@@ -9,6 +9,7 @@
     top/1
 ]).
 
+-define(PAGE_SIZE, 4096).
 -define(SLEEP, 500).
 
 %% public
@@ -84,6 +85,7 @@ top_loop(Pid, #stats {cpu_cores = CpuCores} = Stats) ->
     {Ucpu, Scpu} = cpu_percent(Stats, Stats3),
     CpuPercent = trunc(CpuCores * (Ucpu + Scpu)),
     Vsize = bytes_to_megabytes(Stats3#stats.mem_vsize),
-    io:format("cpu: ~p%~n vsize: ~pM", [CpuPercent, Vsize]),
+    Rss = bytes_to_megabytes(?PAGE_SIZE * (Stats3#stats.mem_rss)),
+    io:format("cpu: ~p% vsize: ~pM rss: ~p~n", [CpuPercent, Vsize, Rss]),
     timer:sleep(?SLEEP),
     top_loop(Pid, Stats3).
