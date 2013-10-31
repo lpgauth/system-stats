@@ -61,15 +61,20 @@ top(Pid) ->
     top_loop(Pid, Stats3).
 
 %% private
+bytes_to_megabytes(Bytes) ->
+    Bytes / 1048576.
+
 read(File, Acc) ->
     case file:read(File, 4096) of
         {ok, Data} when is_list(Data) ->
-            read(File, Data ++ Acc);
+            read(File, [Data | Acc]);
         {ok, Data} when is_binary(Data) ->
             read(File, <<Data/binary, Acc/binary>>);
         {error, Reason} ->
             {error, Reason};
-        eof ->
+        eof when is_list(Acc) ->
+            {ok, lists:flatten(lists:reverse(Acc))};
+        eof when is_binary(Acc) ->
             {ok, Acc}
     end.
 
@@ -77,7 +82,8 @@ top_loop(Pid, #stats {cpu_cores = CpuCores} = Stats) ->
     Stats2 = system_stats:proc_stat(Stats),
     Stats3 = system_stats:proc_pid_stat(Pid, Stats2),
     {Ucpu, Scpu} = cpu_percent(Stats, Stats3),
-    CpuPercent = CpuCores * (Ucpu + Scpu),
-    io:format("top: ~p%~n", [CpuPercent]),
+    CpuPercent = trunc(CpuCores * (Ucpu + Scpu)),
+    Vsize = bytes_to_megabytes(Stats3#stats.mem_vsize),
+    io:format("cpu: ~p%~n vsize: ~pM", [CpuPercent, Vsize]),
     timer:sleep(?SLEEP),
     top_loop(Pid, Stats3).
