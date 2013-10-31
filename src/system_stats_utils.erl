@@ -29,7 +29,9 @@ cpu_percent(#stats {
 read_file(Filename) ->
     case file:open(Filename, [read, raw]) of
         {ok, File} ->
-            read(File, []);
+            Return = read(File, []),
+            ok = file:close(File),
+            Return;
         {error, Reason} ->
             {error, Reason}
     end.

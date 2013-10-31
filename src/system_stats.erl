@@ -12,7 +12,6 @@
 %% public
 proc_cpuinfo(_) -> % #stats {} = _Stats) ->
     {ok, CpuInfo} = system_stats_utils:read_file("/proc/cpuinfo"),
-    ok = file:close(File),
     io:format("~p~n", [CpuInfo]).
 
 proc_pid_stat(#stats {} = Stats) ->
