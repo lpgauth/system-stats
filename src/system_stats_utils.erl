@@ -3,6 +3,7 @@
 
 -export([
     cpu_percent/2,
+    new_stats/0,
     read_file/1,
     read_file/2
 ]).
@@ -26,6 +27,8 @@ cpu_percent(#stats {
     Ucpu = 100 * (((Utime2 + Cutime2) - (Utime + Cutime)) / TotalDiff),
     Scpu = 100 * (((Stime2 + Cstime2) - (Stime + Cstime)) / TotalDiff),
     {Ucpu, Scpu}.
+
+new_stats() -> #stats{}.
 
 read_file(Filename) ->
     read_file(Filename, []).
