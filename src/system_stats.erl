@@ -20,6 +20,8 @@ proc_cpuinfo(#stats {} = Stats) ->
 proc_pid_stat(#stats {} = Stats) ->
     proc_pid_stat(os:getpid(), Stats).
 
+proc_pid_stat(Pid, Stats) when is_integer(Pid) ->
+    proc_pid_stat(integer_to_list(Pid), Stats);
 proc_pid_stat(Pid, #stats {} = Stats) ->
     Filename = "/proc/" ++ Pid ++ "/stat",
     {ok, ProcStat} = system_stats_utils:read_file(Filename),

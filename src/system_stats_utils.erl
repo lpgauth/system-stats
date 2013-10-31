@@ -5,8 +5,11 @@
     cpu_percent/2,
     new_stats/0,
     read_file/1,
-    read_file/2
+    read_file/2,
+    top/1
 ]).
+
+-define(SLEEP, 500).
 
 %% public
 cpu_percent(#stats {
@@ -50,6 +53,13 @@ read_file(Filename, Options) ->
             {error, Reason}
     end.
 
+top(Pid) ->
+    Stats = system_stats:proc_cpuinfo(new_stats()),
+    Stats2 = system_stats:proc_stat(Stats),
+    Stats3 = system_stats:proc_pid_stat(Pid, Stats2),
+    timer:sleep(?SLEEP),
+    top_loop(Pid, Stats3).
+
 %% private
 read(File, Acc) ->
     case file:read(File, 4096) of
@@ -62,3 +72,12 @@ read(File, Acc) ->
         eof ->
             {ok, Acc}
     end.
+
+top_loop(Pid, #stats {cpu_cores = CpuCores} = Stats) ->
+    Stats2 = system_stats:proc_stat(Stats),
+    Stats3 = system_stats:proc_pid_stat(Pid, Stats2),
+    {Ucpu, Scpu} = cpu_percent(Stats, Stats3),
+    CpuPercent = CpuCores * (Ucpu + Scpu),
+    io:format("top: ~p%~n", [CpuPercent]),
+    timer:sleep(?SLEEP),
+    top_loop(Pid, Stats3).
