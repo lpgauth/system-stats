@@ -86,6 +86,6 @@ top_loop(Pid, #stats {cpu_cores = CpuCores} = Stats) ->
     CpuPercent = trunc(CpuCores * (Ucpu + Scpu)),
     Vsize = trunc(bytes_to_megabytes(Stats3#stats.mem_vsize)),
     Rss = trunc(bytes_to_megabytes(?PAGE_SIZE * (Stats3#stats.mem_rss))),
-    io:format("cpu: ~p% vsize: ~pM rss: ~p~n", [CpuPercent, Vsize, Rss]),
+    io:format("cpu: ~p% vsize: ~pM rss: ~pM~n", [CpuPercent, Vsize, Rss]),
     timer:sleep(?SLEEP),
     top_loop(Pid, Stats3).
