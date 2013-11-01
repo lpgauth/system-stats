@@ -8,7 +8,7 @@
     proc_pidstat/1,
     proc_pidstat/2,
     proc_stat/1,
-    supported_os/1
+    supported_os/0
 ]).
 
 %% public
