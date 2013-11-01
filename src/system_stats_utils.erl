@@ -59,7 +59,7 @@ read_file(Filename, Options) ->
 top(Pid) ->
     Stats = system_stats:proc_cpuinfo(new_stats()),
     Stats2 = system_stats:proc_stat(Stats),
-    Stats3 = system_stats:proc_pid_stat(Pid, Stats2),
+    Stats3 = system_stats:proc_pidstat(Pid, Stats2),
     timer:sleep(?SLEEP),
     top_loop(Pid, Stats3).
 
