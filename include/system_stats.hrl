@@ -9,5 +9,6 @@
     load_5,
     load_15,
     mem_rss,
+    mem_total,
     mem_vsize
 }).
