@@ -52,7 +52,6 @@ proc_meminfo(linux, Stats) ->
 proc_meminfo(undefined, Stats) ->
     Stats.
 
-
 proc_loadavg(linux, Stats) ->
     {ok, LoadAvg} = system_stats_utils:read_file("/proc/loadavg"),
     {ok, [Load1, Load5, Load15], _} = io_lib:fread("~f ~f ~f", LoadAvg),
@@ -64,7 +63,6 @@ proc_loadavg(linux, Stats) ->
     };
 proc_loadavg(undefined, Stats) ->
     Stats.
-
 
 proc_pidstat(linux, Pid, Stats) ->
     Filename = "/proc/" ++ Pid ++ "/stat",
