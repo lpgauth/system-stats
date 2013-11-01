@@ -4,7 +4,6 @@
 -export([
     cpu_percent/2,
     new_stats/0,
-    supported_os/0,
     read_file/1,
     read_file/2,
     top/1
@@ -37,12 +36,6 @@ cpu_percent(#stats {
 
 new_stats() -> #stats{}.
 
-supported_os() ->
-    case os:type() of
-        {_, Linux} -> Linux;
-        _Else -> undefined
-    end.
-
 read_file(Filename) ->
     read_file(Filename, []).
 
@@ -71,11 +64,9 @@ top(Pid) ->
     top_loop(Pid, Stats3).
 
 %% private
-bytes_to_megabytes(Bytes) ->
-    Bytes / 1048576.
+bytes_to_megabytes(Bytes) -> Bytes / 1048576.
 
-kilobytes_to_megabytes(Kilobytes) ->
-    Kilobytes / 1024.
+kilobytes_to_megabytes(Kilobytes) -> Kilobytes / 1024.
 
 read(File, Acc) ->
     case file:read(File, 4096) of
@@ -93,14 +84,14 @@ read(File, Acc) ->
 
 top_loop(Pid, #stats {cpu_cores = CpuCores} = Stats) ->
     Stats2 = system_stats:proc_stat(Stats),
-    Stats3 = system_stats:proc_pid_stat(Pid, Stats2),
+    Stats3 = system_stats:proc_pidstat(Pid, Stats2),
     Stats4 = system_stats:proc_meminfo(Stats3),
     {Ucpu, Scpu} = cpu_percent(Stats, Stats4),
     Vsize = bytes_to_megabytes(Stats4#stats.mem_vsize),
     Rss = bytes_to_megabytes(?PAGE_SIZE * (Stats4#stats.mem_rss)),
     CpuPercent = (CpuCores * (Ucpu + Scpu)),
     MemPercent = 100 * (Rss / kilobytes_to_megabytes(Stats4#stats.mem_total)),
-    io:format("vsize: ~pM rss: ~pM cpu: ~p% mem: ~p%~n", [trunc(Vsize),
-        trunc(Rss), trunc(CpuPercent), trunc(MemPercent)]),
+    io:format("vsize: ~.1fM rss: ~.1fM cpu: ~.1f% mem: ~.2f%~n", [Vsize, Rss,
+        CpuPercent, MemPercent]),
     timer:sleep(?SLEEP),
     top_loop(Pid, Stats3).
