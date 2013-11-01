@@ -15,4 +15,4 @@ Collection of functions to collect system statistics (load/cpu %/memory %)
     
 #### Supported OS:
 
-+ Linux (2.6.33+)
++ Linux (2.6.24+)
