@@ -1,18 +1,18 @@
 system-stats
 ============
 
-Collection of functions to get system statistics (load/cpu %/memory)
+Collection of functions to collect system statistics (load/cpu %/memory %)
 
-    1> system_stats_utils:top("2927").
-    cpu: 1541% vsize: 4154M rss: 1254M
-    cpu: 1531% vsize: 4147M rss: 1250M
-    cpu: 1513% vsize: 4149M rss: 1250M
-    cpu: 1489% vsize: 4141M rss: 1244M
-    cpu: 1432% vsize: 4142M rss: 1245M
-    cpu: 1453% vsize: 4154M rss: 1255M
-    cpu: 1444% vsize: 4155M rss: 1255M
-    cpu: 1444% vsize: 4154M rss: 1254M
-    cpu: 1435% vsize: 4155M rss: 1254M
-    cpu: 1389% vsize: 4156M rss: 1255M
-    cpu: 1369% vsize: 4157M rss: 1255M
+#### Example:
 
+    1> system_stats_utils:top("28636").
+    vsize: 4221.9M rss: 1227.3M cpu: 1329.5% mem: 1.91%
+    vsize: 4222.2M rss: 1227.3M cpu: 1297.0% mem: 1.91%
+    vsize: 4221.9M rss: 1226.8M cpu: 1300.2% mem: 1.91%
+    vsize: 4240.4M rss: 1236.3M cpu: 1364.8% mem: 1.92%
+    vsize: 4240.4M rss: 1236.6M cpu: 1450.5% mem: 1.92%
+    vsize: 4240.4M rss: 1236.6M cpu: 1617.1% mem: 1.92%
+    
+#### Supported OS:
+
++ Linux
