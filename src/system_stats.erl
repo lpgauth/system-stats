@@ -7,7 +7,8 @@
     proc_meminfo/1,
     proc_pidstat/1,
     proc_pidstat/2,
-    proc_stat/1
+    proc_stat/1,
+    supported_os/1
 ]).
 
 %% public
@@ -96,6 +97,6 @@ proc_stat(undefined, Stats) ->
 
 supported_os() ->
     case os:type() of
-        {_, Linux} -> Linux;
+        {_, linux} -> linux;
         _Else -> undefined
     end.
