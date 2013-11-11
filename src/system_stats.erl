@@ -87,6 +87,10 @@ proc_pidstat(undefined, _Pid, Stats) ->
 proc_stat(linux, Stats) ->
     {ok, ProcStat} = system_stats_utils:read_file("/proc/stat"),
     {ok, Times, _} = case os:version() of
+        {2, 6, Min} when Min < 11 ->
+            io_lib:fread("cpu ~u ~u ~u ~u ~u ~u ~u", ProcStat);
+        {2, 6, Min} when Min < 24 ->
+            io_lib:fread("cpu ~u ~u ~u ~u ~u ~u ~u ~u", ProcStat);
         {2, 6, Min} when Min < 33 ->
             io_lib:fread("cpu ~u ~u ~u ~u ~u ~u ~u ~u ~u", ProcStat);
         _ ->
